@@ -30,9 +30,10 @@ void deleteNode(ListNode* pNode);
 void deleteList(ListNode* pHead);
 void printList(ListNode* pHead);
 ListNode* addToFront(ListNode* pHead, ListNode* pNode);
+bool isEqual(ListNode* l1, ListNode* l2);
 
 // test case(s)
-void testExample();
+bool testExample();
 
 // function to implement:
 ListNode* addTwoNumbers(ListNode* l1, ListNode* p2) {
@@ -45,7 +46,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* p2) {
 
 
 int main() {
-	testExample();
+	std::cout << "testExample() : " << (testExample() ? "PASS" : "FAIL") << std::endl;
 
 	return 0;
 }
@@ -88,24 +89,47 @@ ListNode* addToFront(ListNode* pHead, ListNode* pNode) {
 }
 
 
-void testExample() {
-	// driver sample
+bool isEqual(ListNode* l1, ListNode* l2) {
+	while (l1 != nullptr && l2 != nullptr) {
+		if (l1->val != l2->val) {
+			return false;
+		}
+
+		l1 = l1->next;
+		l2 = l2->next;
+	}
+
+	// we've reached the end of at least one of the lists
+	// if the other list hasn't ended, then the lists aren't equal
+	return (l1 == nullptr && l2 == nullptr);
+}
+
+
+// driver sample
+bool testExample() {
+	// 342
 	ListNode* p1 = createNode(3);
 	p1 = addToFront(p1, createNode(4));
 	p1 = addToFront(p1, createNode(2));
 
+	// 465
 	ListNode* p2 = createNode(4);
 	p2 = addToFront(p2, createNode(6));
 	p2 = addToFront(p2, createNode(5));
 
-	printList(p1);
-	printList(p2);
+	// 342 + 465 = 807
+	ListNode* pAns = createNode(8);
+	pAns = addToFront(pAns, createNode(0));
+	pAns = addToFront(pAns, createNode(7));
 
 	ListNode* pSum = addTwoNumbers(p1, p2);
-	printList(pSum);
+
+	bool bPass = isEqual(pAns, pSum);
 
 	// cleanup
 	deleteList(p1);
 	deleteList(p2);
 	deleteList(pSum);
+
+	return bPass;
 }
