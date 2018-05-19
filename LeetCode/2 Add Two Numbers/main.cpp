@@ -34,12 +34,38 @@ bool isEqual(ListNode* l1, ListNode* l2);
 
 // test case(s)
 bool testExample();
+bool testUnequalLength();
 
 // function to implement:
-ListNode* addTwoNumbers(ListNode* l1, ListNode* p2) {
-	ListNode* pSum = nullptr;
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+	ListNode* pSum = nullptr;	// return this
+	ListNode** ppNode = &pSum;
 
-	// implement addition here
+	int carry = 0;
+	while (l1 != nullptr || l2 != nullptr || carry > 0) {
+		int sum = (l1 != nullptr) ? l1->val : 0;
+		sum += (l2 != nullptr) ? l2->val : 0;
+		sum += carry;
+
+		if (sum > 9) {
+			sum -= 10;
+			carry = 1;
+		}
+		else {
+			carry = 0;
+		}
+
+		*ppNode = new ListNode(sum);
+		ppNode = &(*ppNode)->next;
+
+		if (l1 != nullptr) {
+			l1 = l1->next;
+		}
+
+		if (l2 != nullptr) {
+			l2 = l2->next;
+		}
+	}
 
 	return pSum;
 }
@@ -47,6 +73,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* p2) {
 
 int main() {
 	std::cout << "testExample() : " << (testExample() ? "PASS" : "FAIL") << std::endl;
+	std::cout << "testUnequalLength() : " << (testUnequalLength() ? "PASS" : "FAIL") << std::endl;
 
 	return 0;
 }
@@ -106,6 +133,9 @@ bool isEqual(ListNode* l1, ListNode* l2) {
 
 
 // driver sample
+// Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+// Output : 7 -> 0 -> 8
+// Explanation : 342 + 465 = 807
 bool testExample() {
 	// 342
 	ListNode* p1 = createNode(3);
@@ -130,6 +160,46 @@ bool testExample() {
 	deleteList(p1);
 	deleteList(p2);
 	deleteList(pSum);
+
+	return bPass;
+}
+
+
+// Input: 
+// Output: 
+// Explanation : 7324 + 94273 = 101597
+bool testUnequalLength() {
+	// 7324
+	ListNode* p1 = createNode(7);
+	p1 = addToFront(p1, createNode(3));
+	p1 = addToFront(p1, createNode(2));
+	p1 = addToFront(p1, createNode(4));
+
+	// 94273
+	ListNode* p2 = createNode(9);
+	p2 = addToFront(p2, createNode(4));
+	p2 = addToFront(p2, createNode(2));
+	p2 = addToFront(p2, createNode(7));
+	p2 = addToFront(p2, createNode(3));
+
+	// 7324 + 94273 = 101597
+	ListNode* pAns = createNode(1);
+	pAns = addToFront(pAns, createNode(0));
+	pAns = addToFront(pAns, createNode(1));
+	pAns = addToFront(pAns, createNode(5));
+	pAns = addToFront(pAns, createNode(9));
+	pAns = addToFront(pAns, createNode(7));
+
+	ListNode* pSum1 = addTwoNumbers(p1, p2);
+	ListNode* pSum2 = addTwoNumbers(p2, p1);
+
+	bool bPass = isEqual(pAns, pSum1) && isEqual(pAns, pSum2);
+
+	// cleanup
+	deleteList(p1);
+	deleteList(p2);
+	deleteList(pSum1);
+	deleteList(pSum2);
 
 	return bPass;
 }
