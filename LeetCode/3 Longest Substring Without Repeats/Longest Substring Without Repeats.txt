@@ -1,0 +1,8 @@
+Given a string, find the length of the longest substring without repeating characters.
+
+Examples:
+
+Given "abcabcbb", the answer is "abc", which is length 3.
+Given "bbbbb", the answer is "b", which is length 1.
+Given "pwwkew", the answer is "wke", which is length 3. Note that the answer must be
+a substring- "pwke" is a subsequence, and not a substring.
