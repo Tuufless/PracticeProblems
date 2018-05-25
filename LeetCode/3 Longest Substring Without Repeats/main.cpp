@@ -13,13 +13,30 @@ a substring- "pwke" is a subsequence, and not a substring.
 
 #include <iostream>
 #include <string>
+#include <array>
 
 // test cases(s)
 bool testExample();
 
 // function to implement:
 int lengthOfLongestSubstring(std::string s) {
-	return 0;
+	int longestSubstringLength = 0;
+	std::string workingSubstring = "";
+
+	for (const char& c : s) {
+		size_t pos = workingSubstring.find(c);
+		if (pos != std::string::npos) {
+			workingSubstring = workingSubstring.substr(pos + 1);
+		}
+
+		workingSubstring.push_back(c);
+
+		if (workingSubstring.length() > longestSubstringLength) {
+			longestSubstringLength = workingSubstring.length();
+		}
+	}
+
+	return longestSubstringLength;
 }
 
 int main() {
