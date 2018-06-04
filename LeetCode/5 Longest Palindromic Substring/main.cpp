@@ -13,11 +13,13 @@ Input: "cbbd"
 Output: "bb"
 */
 
+#include <iostream>
 #include <string>
 #include <algorithm>
 
-bool testExample();
-bool otherTests();
+static const int NUM_TESTS = 4;
+std::string testInput[NUM_TESTS] = { "babad", "cbbd", "bb", "aaaa" };
+std::string testOutput[NUM_TESTS] = { "bab", "bb", "bb", "aaaa" };
 
 std::string longestPalindrome(std::string s) {
 	std::string longestPalindrome = "";
@@ -27,13 +29,13 @@ std::string longestPalindrome(std::string s) {
 		int startIndex = i - 1;		// character just before the palindrome
 		int endIndex = i + 1;		// character just after the palindrome
 
-		// need to establish if the palindrome has an odd or even number of characters
+		while (endIndex < s.length() && s.at(i) == s.at(endIndex)) {
+			++endIndex;
+		}
+		
 		while (startIndex >= 0 && endIndex < s.length()) {
 			if (s.at(startIndex) == s.at(endIndex)) {
 				startIndex--;
-				endIndex++;
-			}
-			else if (endIndex - startIndex == 2) {
 				endIndex++;
 			}
 			else {
@@ -52,19 +54,19 @@ std::string longestPalindrome(std::string s) {
 
 int main()
 {
-	testExample();
-	otherTests();
+	for (int i = 0; i < NUM_TESTS; ++i) {
+		std::string s = testInput[i];
+		std::string output = longestPalindrome(s);
+		std::cout << "longestPalindrome(" << s << ") = " << output << ". ";
+
+		if (output == testOutput[i]) {
+			std::cout << "PASS" << std::endl;
+		}
+		else {
+			std::cout << "FAIL (Expected output = " << testOutput[i] << ")" << std::endl;
+		}
+	}
+
+	return 0;
 }
 
-
-bool testExample() {
-	bool test1 = (longestPalindrome("babad") == "bab" || longestPalindrome("babad") == "aba");
-	bool test2 = longestPalindrome("cbbd") == "bb";
-
-	return test1 && test2;
-}
-
-bool otherTests() {
-	bool bSuccess = longestPalindrome("dyuhfggfhu") == "uhfggfhu";
-	return bSuccess;
-}
