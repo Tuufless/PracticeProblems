@@ -56,10 +56,52 @@ bool test2();
 bool test3();
 bool test4();
 bool test5();
+bool test6();
 
 int myAtoi(std::string str) {
-	// to implement
-	return 0;
+	// remove whitespace
+	size_t stringStart = str.find_first_not_of(' ');
+	if (stringStart == std::string::npos) {
+		return 0;
+	}
+
+	str = str.substr(stringStart);
+	bool bPositive = true;
+	if (str[0] == '-') {
+		bPositive = false;
+		str = str.substr(1);
+	}
+	else if (str[0] == '+') {
+		str = str.substr(1);
+	}
+
+	int val = 0;
+	for (std::string::iterator iter = str.begin(); iter != str.end(); ++iter) {
+		if (!isdigit(*iter)) {
+			break;
+		}
+
+		if (bPositive && val > INT_MAX / 10) {
+			return INT_MAX;
+		}
+		else if (!bPositive && -val < INT_MIN / 10) {
+			return INT_MIN;
+		}
+		
+		val *= 10;
+
+		int digit = *iter - '0';
+		if (bPositive && INT_MAX - val < digit) {
+			return INT_MAX;
+		}
+		else if (!bPositive && INT_MIN + val > -digit) {
+			return INT_MIN;
+		}
+
+		val += digit;
+	}
+
+	return (bPositive ? 1 : -1) * val;
 }
 
 int main() {
@@ -68,6 +110,7 @@ int main() {
 	std::cout << "test3() : " << (test3() ? "PASS" : "FAIL") << std::endl;
 	std::cout << "test4() : " << (test4() ? "PASS" : "FAIL") << std::endl;
 	std::cout << "test5() : " << (test5() ? "PASS" : "FAIL") << std::endl;
+	std::cout << "test6() : " << (test6() ? "PASS" : "FAIL") << std::endl;
 	return 0;
 }
 
@@ -89,4 +132,8 @@ bool test4() {
 
 bool test5() {
 	return myAtoi("-91283472332") == INT_MIN;
+}
+
+bool test6() {
+	return myAtoi("2147483648") == INT_MAX;
 }
