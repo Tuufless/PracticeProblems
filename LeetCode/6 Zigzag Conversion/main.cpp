@@ -36,7 +36,9 @@ bool testExample();
 std::string convert(const std::string& s, int numRows) {
 	std::string result;
 
-	int n = numRows;
+	if (numRows == 1) {
+		return s;
+	}
 
 	for (size_t r = 0; r < numRows; ++r) {
 		size_t i = r;
@@ -46,7 +48,7 @@ std::string convert(const std::string& s, int numRows) {
 		}
 
 		while (i < s.length()) {
-			int diff = 2 * (n - r - 1);
+			int diff = 2 * (numRows - r - 1);
 			if (diff > 0) {
 				i += diff;
 				if (i < s.length()) {
@@ -81,6 +83,8 @@ int main() {
 bool testExample() {
 	bool b1 = convert("PAYPALISHIRING", 3) == "PAHNAPLSIIGYIR";
 	bool b2 = convert("PAYPALISHIRING", 4) == "PINALSIGYAHRPI";
+	bool b3 = convert("A", 1) == "A";
+	bool b4 = convert("AB", 1) == "AB";
 
 	return b1 && b2;
 }
